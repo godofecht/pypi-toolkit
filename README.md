@@ -39,6 +39,8 @@ Publishing Python packages to PyPI can be a repetitive and error-prone process. 
 - [ ] Integration with CI/CD pipelines
 - [ ] Enhanced logging and error reporting
 - [ ] Support for additional testing frameworks
+- [ ] KeyRing management with Twine
+- [ ] Template management with `cookiecutter` and some template library
 
 ## Installation
 
