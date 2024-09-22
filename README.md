@@ -1,6 +1,5 @@
 # PyPI Toolkit
 
-```markdown
 `pypi-toolkit` is a command-line tool designed to simplify the process of building, testing, and uploading Python packages to PyPI.
 
 ## Table of Contents
