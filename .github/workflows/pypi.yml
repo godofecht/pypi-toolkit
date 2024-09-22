@@ -1,0 +1,38 @@
+# .github/workflows/pypi.yml
+name: Publish Python Package
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'  # Adjust this to your Python version
+
+    - name: Install dependencies
+      run: |
+        pip install --upgrade pip
+        pip install build twine pytest
+
+    - name: Run tests
+      run: pytest
+
+    - name: Build package
+      run: python -m build
+
+    - name: Publish to PyPI
+      if: github.ref == 'refs/heads/main'
+      env:
+        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      run: twine upload dist/*
