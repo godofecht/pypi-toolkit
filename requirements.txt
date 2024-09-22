@@ -1,3 +1,6 @@
 twine
 pytest
 flake8
+wheel
+setuptools
+cookiecutter
