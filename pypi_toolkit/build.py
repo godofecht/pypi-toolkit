@@ -57,13 +57,10 @@ def install_cookiecutter() -> None:
         logging.info("Cookiecutter not found. Installing cookiecutter...")
         run_command("pip install cookiecutter")
 
-def create_package_with_cookiecutter(template_url: str = None) -> None:
+def create_package_with_cookiecutter() -> None:
     """Create a new Python package using cookiecutter."""
     install_cookiecutter()
-    if not template_url:
-        template_url = input("Enter the Cookiecutter template URL or leave blank to use the default: ")
-    if not template_url:
-        template_url = "https://github.com/audreyfeldroy/cookiecutter-pypackage.git"  # Example default template
+    template_url = "https://github.com/audreyr/cookiecutter-pypackage.git"
     logging.info(f"Creating a new Python package with cookiecutter from template: {template_url}")
     run_command(f"cookiecutter {template_url}")
 
@@ -88,10 +85,6 @@ def main() -> None:
             "  create_package Create a new Python package using cookiecutter."
         )
     )
-
-    parser.add_argument(
-        "--template", help="Specify the cookiecutter template URL for creating a new Python package."
-    )
     
     args = parser.parse_args()
 
@@ -102,7 +95,7 @@ def main() -> None:
         git_manager.init_repository()
 
     if args.action == "create_package":
-        create_package_with_cookiecutter(args.template)
+        create_package_with_cookiecutter()
 
     if args.action in ["build", "all"]:
         build_package()

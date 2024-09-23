@@ -1,3 +1,10 @@
+import os
+import subprocess
+import sys
+import argparse
+import logging
+from dataclasses import dataclass
+
 @dataclass
 class GitManager:
     git_user: str = os.getenv('GIT_USER', '')
