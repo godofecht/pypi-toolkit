@@ -5,59 +5,11 @@ import argparse
 import logging
 from dataclasses import dataclass
 from dotenv import load_dotenv
+from pypi_toolkit.git_manager import GitManager
 
 # Load environment variables from .env file if available
 if os.path.exists('.env'):
     load_dotenv()
-
-@dataclass
-class GitManager:
-    git_user: str = os.getenv('GIT_USER', '')
-    git_email: str = os.getenv('GIT_EMAIL', '')
-
-    def run_command(self, command: str) -> None:
-        """Run shell commands and exit if they fail."""
-        logging.info(f"Running command: {command}")
-        result = subprocess.run(command, shell=True, text=True)
-        if result.returncode != 0:
-            logging.error(f"Command failed: {command}")
-            sys.exit(result.returncode)
-
-    def check_env_variables(self) -> None:
-        """Check for required environment variables and log if not found."""
-        if not self.git_user:
-            logging.warning("Environment variable GIT_USER not found.")
-        if not self.git_email:
-            logging.warning("Environment variable GIT_EMAIL not found.")
-
-    def prompt_for_missing_details(self) -> None:
-        """Prompt user interactively for Git details if environment variables are missing."""
-        if not self.git_user:
-            self.git_user = input("Enter your Git username: ")
-        if not self.git_email:
-            self.git_email = input("Enter your Git email: ")
-
-    def configure_git(self) -> None:
-        """Configure git with user details."""
-        self.run_command(f"git config user.name '{self.git_user}'")
-        self.run_command(f"git config user.email '{self.git_email}'")
-
-    def init_repository(self) -> None:
-        """Initialize a git repository and commit initial files."""
-        if not os.path.exists('.git'):
-            logging.info("Initializing a new Git repository...")
-
-            self.check_env_variables()
-            self.prompt_for_missing_details()
-            self.configure_git()
-
-            # Initialize git, add files, and make the first commit
-            self.run_command("git init")
-            self.run_command("git add .")
-            self.run_command("git commit -m 'Initial commit'")
-        else:
-            logging.info("Git repository already exists.")
-
 
 def run_command(command: str) -> None:
     """Run shell commands and exit if they fail."""
@@ -97,6 +49,24 @@ def upload_to_pypi() -> None:
     logging.info(f"Uploading the package to PyPI as {pypi_username}...")
     run_command(f"twine upload dist/* -u {pypi_username} -p {pypi_password}")
 
+def install_cookiecutter() -> None:
+    """Ensure that Cookiecutter is installed."""
+    try:
+        import cookiecutter
+    except ImportError:
+        logging.info("Cookiecutter not found. Installing cookiecutter...")
+        run_command("pip install cookiecutter")
+
+def create_package_with_cookiecutter(template_url: str = None) -> None:
+    """Create a new Python package using cookiecutter."""
+    install_cookiecutter()
+    if not template_url:
+        template_url = input("Enter the Cookiecutter template URL or leave blank to use the default: ")
+    if not template_url:
+        template_url = "https://github.com/audreyfeldroy/cookiecutter-pypackage.git"  # Example default template
+    logging.info(f"Creating a new Python package with cookiecutter from template: {template_url}")
+    run_command(f"cookiecutter {template_url}")
+
 def main() -> None:
     """Main entry point for argument parsing and command execution."""
     logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
@@ -107,8 +77,20 @@ def main() -> None:
     
     parser.add_argument(
         "action",
-        choices=["build", "test", "upload", "all", "init_git"],
-        help="Choose the action to perform: build, test, upload, all, or init_git."
+        choices=["build", "test", "upload", "all", "init_git", "create_package"],
+        help=(
+            "Choose the action to perform:\n"
+            "  build          Build the Python package.\n"
+            "  test           Run the test suite.\n"
+            "  upload         Upload the built package to PyPI.\n"
+            "  all            Build, test, and upload the package to PyPI.\n"
+            "  init_git       Initialize a Git repository.\n"
+            "  create_package Create a new Python package using cookiecutter."
+        )
+    )
+
+    parser.add_argument(
+        "--template", help="Specify the cookiecutter template URL for creating a new Python package."
     )
     
     args = parser.parse_args()
@@ -118,6 +100,9 @@ def main() -> None:
     # Execute the action based on the argument passed
     if args.action == "init_git":
         git_manager.init_repository()
+
+    if args.action == "create_package":
+        create_package_with_cookiecutter(args.template)
 
     if args.action in ["build", "all"]:
         build_package()

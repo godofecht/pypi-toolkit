@@ -15,12 +15,12 @@ with open(os.path.join("pypi_toolkit", "__init__.py")) as fp:
 setup(
     name="pypi-toolkit",
     version=version['__version__'],
-    author="Your Name",
-    author_email="your.email@example.com",
+    author="Abhishek Shivakumar",
+    author_email="abhishek.shivakumar@gmail.com",
     description="A toolkit for building, testing, and uploading Python packages to PyPI",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/pypi-toolkit",
+    url="https://github.com/godofecht/pypi-toolkit",
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
