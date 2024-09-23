@@ -5,3 +5,4 @@ wheel
 setuptools
 cookiecutter
 python-dotenv
+dataclasses
