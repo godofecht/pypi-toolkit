@@ -18,6 +18,7 @@ Publishing Python packages to PyPI can be a repetitive and error-prone process. 
 
 ## Features
 
+- **Create**: Initialize package folder structure.
 - **Build**: Creates source and wheel distributions.
 - **Test**: Runs your test suite using `pytest`.
 - **Upload**: Uploads your package to PyPI using `twine`.
@@ -31,6 +32,7 @@ Publishing Python packages to PyPI can be a repetitive and error-prone process. 
 - [x] Run tests using `pytest`
 - [x] Upload packages to PyPI using `twine`
 - [x] Perform build, test, and upload in sequence
+- [+] Template management with `cookiecutter`
 
 ### Upcoming Features
 
@@ -39,7 +41,6 @@ Publishing Python packages to PyPI can be a repetitive and error-prone process. 
 - [ ] Enhanced logging and error reporting
 - [ ] Support for additional testing frameworks
 - [ ] KeyRing management with Twine
-- [ ] Template management with `cookiecutter` and some template library
 
 ## Installation
 
@@ -52,6 +53,11 @@ pip install pypi-toolkit
 ## Usage
 
 After installing `pypi-toolkit`, you can use the following commands:
+
+- To create your package:
+  ```bash
+  pypi-toolkit create_package
+  ```
 
 - To build your package:
   ```bash
