@@ -1,0 +1,62 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pypi-toolkit"
+dynamic = ["version"]
+description = "A CLI for building, testing, scaffolding, and publishing Python packages"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "Abhishek Shivakumar"},
+]
+dependencies = [
+    "build>=1.2",
+    "cookiecutter>=2.6",
+    "python-dotenv>=1.0",
+    "pytest>=8.0",
+    "twine>=5.0",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+[project.urls]
+Homepage = "https://github.com/godofecht/pypi-toolkit"
+Issues = "https://github.com/godofecht/pypi-toolkit/issues"
+
+[project.scripts]
+pypi-toolkit = "pypi_toolkit.build:main"
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.12",
+]
+
+[tool.setuptools]
+packages = ["pypi_toolkit"]
+
+[tool.setuptools.dynamic]
+version = {attr = "pypi_toolkit.__version__"}
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
