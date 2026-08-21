@@ -1,8 +1,1 @@
-twine
-pytest
-flake8
-wheel
-setuptools
-cookiecutter
-python-dotenv
-dataclasses
+-e .[dev]
