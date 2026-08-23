@@ -1,81 +1,55 @@
 # PyPI Toolkit
 
-`pypi-toolkit` is a command-line tool designed to simplify the process of building, testing, and uploading Python packages to PyPI.
+`pypi-toolkit` is a small command-line toolkit for the routine mechanics around publishing Python packages: run tests, build distributions, upload them with Twine, scaffold a package, or initialise Git.
 
-## Table of Contents
-
-- [Motivation](#motivation)
-- [Features](#features)
-- [Checklist](#checklist)
-    - [Current Features](#current-features)
-    - [Upcoming Features](#upcoming-features)
-- [Installation](#installation)
-- [Usage](#usage)
-
-## Motivation
-
-Publishing Python packages to PyPI can be a repetitive and error-prone process. `pypi-toolkit` aims to streamline this workflow by providing a single tool that handles building, testing, and uploading your packages, ensuring consistency and reducing the likelihood of mistakes. With `pypi-toolkit`, it becomes much easier to quickly build, test, and upload your PyPI package.
-
-## Features
-
-- **Create**: Initialize package folder structure.
-- **Build**: Creates source and wheel distributions.
-- **Test**: Runs your test suite using `pytest`.
-- **Upload**: Uploads your package to PyPI using `twine`.
-- **All**: Performs build, test, and upload in sequence.
-
-## Checklist
-
-### Current Features
-
-- [x] Build source and wheel distributions
-- [x] Run tests using `pytest`
-- [x] Upload packages to PyPI using `twine`
-- [x] Perform build, test, and upload in sequence
-- [+] Template management with `cookiecutter`
-
-### Upcoming Features
-
-- [ ] Automated version bumping
-- [ ] Integration with CI/CD pipelines
-- [ ] Enhanced logging and error reporting
-- [ ] Support for additional testing frameworks
-- [ ] KeyRing management with Twine
-
-## Installation
-
-You can install `pypi-toolkit` using `pip`:
+## Install
 
 ```bash
 pip install pypi-toolkit
 ```
 
-## Usage
+For development:
 
-After installing `pypi-toolkit`, you can use the following commands:
-
-- To create your package:
-  ```bash
-  pypi-toolkit create_package
-  ```
-
-- To build your package:
-  ```bash
-  pypi-toolkit build
-  ```
-
-- To test your package:
-  ```bash
-  pypi-toolkit test
-  ```
-
-- To upload your package to PyPI:
-  ```bash
-  pypi-toolkit upload
-  ```
-
-- To perform build, test, and upload in sequence:
-  ```bash
-  pypi-toolkit all
-  ```
+```bash
+python -m pip install -e '.[dev]'
 ```
+
+## Commands
+
+```bash
+pypi-toolkit test
+pypi-toolkit build
+pypi-toolkit upload
+pypi-toolkit all
+pypi-toolkit create_package
+pypi-toolkit init_git
+```
+
+`all` deliberately runs tests before building and uploading. Uploads read standard Twine credentials from `TWINE_USERNAME` and `TWINE_PASSWORD`; the legacy `PYPI_USERNAME` and `PYPI_PASSWORD` names are also accepted.
+
+A token-based setup looks like this:
+
+```bash
+export TWINE_USERNAME=__token__
+export TWINE_PASSWORD='pypi-...'
+pypi-toolkit all
+```
+
+Credentials are passed to Twine through the environment rather than command-line arguments.
+
+## Development
+
+Run the same checks used by GitHub Actions:
+
+```bash
+python -m pytest
+ruff check .
+python -m build
+python -m twine check dist/*
+```
+
+CI runs on pull requests and pushes to `main`. Publishing is intentionally separate from CI and only runs for GitHub releases, preventing ordinary documentation or code commits from attempting to republish the same package version.
+
+## License
+
+MIT

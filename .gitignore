@@ -11,7 +11,9 @@ dist/
 
 # Virtual environments
 venv/
-.env/
+.env
+.env.*
+!.env.example
 .venv/
 
 # IDEs
@@ -26,6 +28,8 @@ htmlcov/
 .coverage
 .coverage.*
 .cache
+.pytest_cache/
+.ruff_cache/
 nosetests.xml
 coverage.xml
 *.cover
